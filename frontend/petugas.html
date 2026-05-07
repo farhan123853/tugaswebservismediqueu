@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard Petugas - MediQueue</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="navbar-brand">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
+            MediQueue - Petugas
+        </div>
+        <div class="user-info">
+            <span id="user-name-display" style="font-weight: 500;"></span>
+            <button class="logout-btn" onclick="logout()">Keluar</button>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="widget" style="margin-bottom: 2rem; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;">
+            <h3 class="widget-title" style="margin-bottom: 0;">Kontrol Antrian</h3>
+            <div style="display: flex; gap: 1rem;">
+                <select id="filter-poli" class="form-control" style="width: auto;" onchange="loadAllQueues()">
+                    <option value="">Semua Poli</option>
+                    <option value="Umum">Poli Umum</option>
+                    <option value="Gigi">Poli Gigi</option>
+                    <option value="Anak">Poli Anak</option>
+                    <option value="Mata">Poli Mata</option>
+                </select>
+                <button class="btn btn-primary" onclick="callNextQueue()" style="width: auto;">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-right: 8px;"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
+                    Panggil Berikutnya
+                </button>
+            </div>
+        </div>
+
+        <div class="widget">
+            <h3 class="widget-title">Daftar Antrian Hari Ini</h3>
+            <div class="table-container">
+                <table id="all-queues-table">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Nomor Antrian</th>
+                            <th>Nama Pasien</th>
+                            <th>Poli</th>
+                            <th>Keluhan</th>
+                            <th>Status</th>
+                            <th>Aksi</th>
+                        </tr>
+                    </thead>
+                    <tbody id="all-queues-body">
+                        <!-- Data will be populated here -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <div id="toast-container" class="toast-container"></div>
+    <script src="app.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            checkAuth('petugas');
+            document.getElementById('user-name-display').textContent = getUserData().nama;
+            loadAllQueues();
+            
+            // Auto refresh list every 5 seconds
+            setInterval(loadAllQueues, 5000);
+        });
+    </script>
+</body>
+</html>
