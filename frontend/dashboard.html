@@ -3,70 +3,78 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard Pasien - MediQueue</title>
+    <title>Dashboard - MediQueue</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <nav class="navbar">
-        <div class="navbar-brand">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
-            MediQueue
+    <nav class="dashboard-nav">
+        <div class="logo">
+            <i class="ph-bold ph-first-aid"></i>
+            <span>MediQueue</span>
         </div>
         <div class="user-info">
-            <span id="user-name-display" style="font-weight: 500;"></span>
-            <button class="logout-btn" onclick="logout()">Keluar</button>
+            <span style="font-weight: 500;">Halo, <span style="color: var(--primary);">Pasien</span></span>
+            <button class="btn-logout" onclick="window.location.href='index.html'">Keluar</button>
         </div>
     </nav>
 
-    <div class="container">
-        <div class="grid grid-cols-2">
-            <!-- Form Ambil Antrian -->
-            <div class="widget">
-                <h3 class="widget-title">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path><rect x="8" y="2" width="8" height="4" rx="1" ry="1"></rect></svg>
-                    Ambil Antrian Baru
-                </h3>
-                <form onsubmit="handleTakeQueue(event)">
-                    <div class="form-group">
-                        <label for="poli">Pilih Poli</label>
-                        <select id="poli" class="form-control" required>
-                            <option value="">-- Pilih Poli --</option>
-                            <option value="Umum">Poli Umum</option>
-                            <option value="Gigi">Poli Gigi</option>
-                            <option value="Anak">Poli Anak</option>
-                            <option value="Mata">Poli Mata</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label for="keluhan">Keluhan Singkat</label>
-                        <textarea id="keluhan" class="form-control" rows="3" required placeholder="Jelaskan keluhan anda..."></textarea>
-                    </div>
-                    <button type="submit" class="btn btn-primary">Ambil Nomor Antrian</button>
-                </form>
-            </div>
-
-            <!-- Status Antrian Saat Ini -->
-            <div class="widget">
-                <h3 class="widget-title">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
-                    Status Antrian Anda
-                </h3>
-                <div id="active-queue-container">
-                    <div class="empty-state">
-                        Memuat data antrian...
-                    </div>
+    <main class="main-content">
+        <!-- Ambil Antrian Card -->
+        <div class="dashboard-card">
+            <h3 class="card-title">
+                <i class="ph ph-plus-circle" style="color: var(--primary);"></i>
+                Ambil Antrian Baru
+            </h3>
+            <form id="queueForm">
+                <div class="form-group">
+                    <label for="poli">Pilih Poli</label>
+                    <select id="poli" required>
+                        <option value="">-- Pilih Layanan --</option>
+                        <option value="umum">Poli Umum</option>
+                        <option value="gigi">Poli Gigi</option>
+                        <option value="anak">Poli Anak</option>
+                    </select>
                 </div>
+                <div class="form-group">
+                    <label for="keluhan">Keluhan Singkat</label>
+                    <textarea id="keluhan" rows="3" placeholder="Jelaskan sedikit keluhan Anda..."></textarea>
+                </div>
+                <button type="submit" class="btn-primary" style="width: 100%;">Ambil Nomor Antrian</button>
+            </form>
+        </div>
+
+        <!-- Status Antrian Card -->
+        <div class="dashboard-card" id="statusCard">
+            <h3 class="card-title">
+                <i class="ph ph-activity" style="color: var(--primary);"></i>
+                Status Antrian Anda
+            </h3>
+            <div class="empty-state" id="emptyStatus">
+                <i class="ph ph-heartbeat"></i>
+                <p>Anda belum mengambil antrian hari ini.</p>
+            </div>
+            <div class="status-active" id="activeStatus" style="display: none;">
+                <p style="color: var(--text-muted);">Nomor Antrian Anda:</p>
+                <h2 class="queue-number">A-012</h2>
+                <div style="margin-bottom: 1.5rem;">
+                    <span class="badge badge-warning">Menunggu</span>
+                </div>
+                <p style="font-size: 0.875rem; color: var(--text-muted);">Estimasi waktu tunggu: 45 Menit</p>
             </div>
         </div>
 
-        <!-- Riwayat -->
-        <div class="widget" style="margin-top: 2rem;">
-            <h3 class="widget-title">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+        <!-- Riwayat Card -->
+        <div class="dashboard-card full-width">
+            <h3 class="card-title">
+                <i class="ph ph-clock-counter-clockwise" style="color: var(--primary);"></i>
                 Riwayat Kunjungan
             </h3>
             <div class="table-container">
-                <table id="history-table">
+                <table>
                     <thead>
                         <tr>
                             <th>Tanggal</th>
@@ -75,23 +83,55 @@
                             <th>Status</th>
                         </tr>
                     </thead>
-                    <tbody id="history-body">
-                        <!-- Data will be populated here -->
+                    <tbody>
+                        <tr>
+                            <td>12 Mei 2024</td>
+                            <td>A-005</td>
+                            <td>Poli Umum</td>
+                            <td><span class="badge badge-success">Selesai</span></td>
+                        </tr>
+                        <tr>
+                            <td>08 Mei 2024</td>
+                            <td>G-002</td>
+                            <td>Poli Gigi</td>
+                            <td><span class="badge badge-success">Selesai</span></td>
+                        </tr>
+                        <tr id="newRow" style="display: none;">
+                            <td id="rowDate"></td>
+                            <td>A-012</td>
+                            <td id="rowPoli"></td>
+                            <td><span class="badge badge-warning">Menunggu</span></td>
+                        </tr>
                     </tbody>
                 </table>
             </div>
         </div>
-    </div>
+    </main>
 
-    <div id="toast-container" class="toast-container"></div>
-    <script src="app.js"></script>
     <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            checkAuth('pasien');
-            loadPatientData();
+        document.getElementById('queueForm').addEventListener('submit', function(e) {
+            e.preventDefault();
             
-            // Auto refresh status every 10 seconds
-            setInterval(loadQueueStatus, 10000);
+            const poliSelect = document.getElementById('poli');
+            const poliName = poliSelect.options[poliSelect.selectedIndex].text;
+            const now = new Date();
+            const dateString = now.toLocaleDateString('id-ID', { day: '2-digit', month: 'long', year: 'numeric' });
+
+            // DOM Manipulation: Update Status Card
+            document.getElementById('emptyStatus').style.display = 'none';
+            document.getElementById('activeStatus').style.display = 'block';
+
+            // Add to history table (simulated)
+            const newRow = document.getElementById('newRow');
+            document.getElementById('rowDate').innerText = dateString;
+            document.getElementById('rowPoli').innerText = poliName;
+            newRow.style.display = 'table-row';
+
+            // Reset Form
+            this.reset();
+
+            // Notification
+            alert('Antrian berhasil diambil! Nomor Anda adalah A-012');
         });
     </script>
 </body>

@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - MediQueue</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="split-screen">
+        <div class="left-panel">
+            <i class="ph ph-heartbeat" style="font-size: 5rem; margin-bottom: 2rem;"></i>
+            <h1>Selamat Datang di MediQueue</h1>
+            <p>Solusi kesehatan digital terpadu untuk kenyamanan Anda.</p>
+        </div>
+        <div class="right-panel">
+            <a href="index.html" class="back-home">
+                <i class="ph ph-arrow-left"></i> Kembali ke Beranda
+            </a>
+            
+            <div class="form-container">
+                <div class="form-header">
+                    <h2 style="font-size: 1.5rem; font-weight: 700;">Login ke Akun Anda</h2>
+                    <p style="color: var(--text-muted); margin-top: 0.5rem;">Silakan masukkan detail akun Anda</p>
+                </div>
+
+                <div class="tab-toggle">
+                    <button class="tab-btn active" id="loginTab">Login</button>
+                    <button class="tab-btn" id="registerTab">Register</button>
+                </div>
+
+                <form id="authForm" onsubmit="handleAuth(event)">
+                    <div class="form-group">
+                        <label for="email">Email</label>
+                        <input type="email" id="email" placeholder="contoh@email.com" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="password">Password</label>
+                        <input type="password" id="password" placeholder="••••••••" required>
+                    </div>
+                    <button type="submit" class="btn-primary" style="width: 100%; margin-top: 1rem;">Masuk</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const loginTab = document.getElementById('loginTab');
+        const registerTab = document.getElementById('registerTab');
+        const formHeader = document.querySelector('.form-header h2');
+
+        loginTab.addEventListener('click', () => {
+            loginTab.classList.add('active');
+            registerTab.classList.remove('active');
+            formHeader.innerText = 'Login ke Akun Anda';
+        });
+
+        registerTab.addEventListener('click', () => {
+            registerTab.classList.add('active');
+            loginTab.classList.remove('active');
+            formHeader.innerText = 'Daftar Akun Baru';
+        });
+
+        function handleAuth(e) {
+            e.preventDefault();
+            // Simulasi loading
+            const btn = e.target.querySelector('button');
+            btn.innerText = 'Memproses...';
+            btn.disabled = true;
+            
+            setTimeout(() => {
+                window.location.href = 'dashboard.html';
+            }, 1000);
+        }
+    </script>
+</body>
+</html>
